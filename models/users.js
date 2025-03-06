@@ -21,11 +21,11 @@ User.init(
     },
     image: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     otp: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -38,7 +38,7 @@ User.init(
     },
     phone: {
       type: DataTypes.STRING(20),
-      allowNull: true,
+      allowNull: false,
     },
     dateofbirth: {
       type: DataTypes.DATEONLY,
@@ -50,23 +50,23 @@ User.init(
     },
     country: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     state: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     city: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     pincode: {
       type: DataTypes.STRING(10),
-      allowNull: false,
+      allowNull: true,
     },
     address: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     gender: {
       type: DataTypes.STRING(36),
@@ -74,7 +74,7 @@ User.init(
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     specialization: {
       type: DataTypes.STRING,
@@ -87,20 +87,20 @@ User.init(
     },
     reset_token: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     reset_token_expiry: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: DataTypes.NOW,
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: DataTypes.NOW,
     },
   },

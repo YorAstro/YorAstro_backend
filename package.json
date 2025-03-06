@@ -16,6 +16,7 @@
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.13.0",
-    "sequelize": "^6.37.6"
+    "sequelize": "^6.37.6",
+    "uuid": "^11.1.0"
   }
 }
