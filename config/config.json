@@ -1,0 +1,26 @@
+{
+    "development": {
+      "username": "root",
+      "password": "password",
+      "database": "astroyor",
+      "host": "127.0.0.1",
+      "logging": false,
+      "dialect": "mysql"
+    },
+    "test": {
+      "username": "root",
+      "password": "password",
+      "database": "astroyor",
+      "host": "127.0.0.1",
+      "logging": false,
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "root",
+      "password": "password",
+      "database": "astroyor",
+      "host": "127.0.0.1",
+      "logging": false,
+      "dialect": "mysql"
+    }
+  }
