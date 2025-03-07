@@ -39,6 +39,39 @@ const register = async (req, res) => {
 };
 
 
+const registerAstrologer = async (req, res) => {
+    const { password, email, name, phone, dateofbirth, gender } = req.body;
+    const id = uuidv4();
+    try {
+        const existingUser = await User.findOne({ where: { email } });
+        const phoneNumberCheck = await User.findOne({ where: { phone } });
+        if (existingUser || phoneNumberCheck) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const newUser = await User.create({
+            id: id,
+            email,
+            password: hashedPassword,
+            name,
+            phone,
+            dateofbirth,
+            gender,
+            role : "astrologer"
+        });
+        const token = jwt.sign(
+            { userId: newUser.id, role: newUser.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+        return res.status(201).json({ message: 'User registered successfully', userId: newUser.id, token: token });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Internal Server Error', details: err.message });
+    }
+};
+
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -96,4 +129,4 @@ const forgotPassword = async (req, res) => {
     }
 
 }
-module.exports = { register, login, forgotPassword };
+module.exports = { register, login, forgotPassword ,registerAstrologer};
