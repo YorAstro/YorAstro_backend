@@ -2,8 +2,9 @@ const express =require("express");
 const connectDB =require('./services/databaseConnection.js');
 const app = express();
 const routes = require('./routes/authRoutes.js');
-const userroutes = require('./routes/user.js')
+const userRoutes = require('./routes/user.js')
 const productRoutes = require('./routes/product.js');
+const categoryRoutes = require('./routes/category.js')
 var bp = require('body-parser')
 
 app.use(express.json());
@@ -22,6 +23,8 @@ app.use(bp.json());
 //     next();
 // });
 app.use(routes);
-app.use('/user',userroutes);
-app.use('/product',productRoutes)
+app.use('/user',userRoutes);
+app.use('/product',productRoutes);
+app.use('/category',categoryRoutes);
+
 module.exports = app;
