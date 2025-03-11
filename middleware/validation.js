@@ -7,7 +7,7 @@ const registerSchema = Joi.object({
   phone: Joi.string().max(10).allow(null, ''),
   dateofbirth: Joi.date(),
   gender: Joi.string().valid('male', 'female', 'other').required(),
-  password: Joi.string().min(6).required(),
+  password: Joi.string().required(),
 });
 
 // Validation schema for user login
