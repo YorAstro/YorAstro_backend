@@ -3,7 +3,7 @@ const connectDB =require('./services/databaseConnection.js');
 const app = express();
 const routes = require('./routes/authRoutes.js');
 const userroutes = require('./routes/user.js')
-
+const productRoutes = require('./routes/product.js');
 var bp = require('body-parser')
 
 app.use(express.json());
@@ -22,5 +22,6 @@ app.use(bp.json());
 //     next();
 // });
 app.use(routes);
-app.use('/user',userroutes)
+app.use('/user',userroutes);
+app.use('/product',productRoutes)
 module.exports = app;
