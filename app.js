@@ -1,30 +1,56 @@
-const express =require("express");
-const connectDB =require('./services/databaseConnection.js');
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+const connectDB = require('./services/databaseConnection');
+const config = require('./config/config');
+const { logRequest, logError } = require('./utils/logger');
+const { errorHandler } = require('./utils/errorHandler');
+
+// Import routes
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/user');
+const productRoutes = require('./routes/product');
+const categoryRoutes = require('./routes/category');
+
 const app = express();
-const routes = require('./routes/authRoutes.js');
-const userRoutes = require('./routes/user.js')
-const productRoutes = require('./routes/product.js');
-const categoryRoutes = require('./routes/category.js')
-var bp = require('body-parser')
 
+// Security middleware
+app.use(helmet());
+app.use(cors(config.cors));
+
+// Body parsing middleware
 app.use(express.json());
-app.use(bp.json());
-// app.use(bp.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
-// app.use((req, res, next) => {
-//     console.log("Received Body:", req.body);
-//     next();
-// });
+// Compression middleware
+app.use(compression());
 
-// app.use((req, res, next) => {
-//     if (typeof req.body === 'object' && req.body !== null) {
-//         req.body = JSON.parse(JSON.stringify(req.body)); // Removes unexpected characters
-//     }
-//     next();
-// });
-app.use(routes);
-app.use('/user',userRoutes);
-app.use('/product',productRoutes);
-app.use('/category',categoryRoutes);
+// Logging middleware
+if (config.env === 'development') {
+    app.use(morgan('dev'));
+}
+app.use(logRequest);
 
+// API routes
+app.use(`${config.api.prefix}/auth`, authRoutes);
+app.use(`${config.api.prefix}/users`, userRoutes);
+app.use(`${config.api.prefix}/products`, productRoutes);
+app.use(`${config.api.prefix}/categories`, categoryRoutes);
+
+// Error handling middleware
+app.use(logError);
+app.use(errorHandler);
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        status: 'error',
+        message: 'Route not found'
+    });
+});
+
+// Connect to database
+connectDB;
 module.exports = app;
