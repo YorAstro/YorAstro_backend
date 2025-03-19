@@ -10,7 +10,7 @@ dotenv.config();
       return; // Ensure the function stops execution here
     }
     try {
-      const decoded = jwt.verify(token, this.SECRET_KEY);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       let { id } = decoded['data'];
       await User.findByIdAndUpdate(id , {lastLogin : new Date()});
       req.user = decoded['data'];
