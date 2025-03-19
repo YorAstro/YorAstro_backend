@@ -75,7 +75,7 @@ const registerAstrologer = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ where: { email }, attributes: ['name', 'email', 'phone', 'gender', 'role','dateofbirth'] });
+        const user = await User.findOne({ where: { email }, attributes: ['name', 'email', 'phone', 'gender', 'role','dateofbirth','password'] });
         if (!user) {
             return res.status(400).json({ error: "Invalid Credentials" });
         }
