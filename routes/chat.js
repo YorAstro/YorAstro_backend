@@ -10,7 +10,7 @@ router.use(authenticate.authenticate);
 router.get('/astrologer/:astrologerId', chatController.getAstrologerDetails);
 
 // Get chat history
-router.post('/history/:astrologerId', chatController.getChatHistory);
+router.get('/history/:astrologerId', chatController.getChatHistory);
 
 // Get active astrologers (for users)
 router.get('/active-astrologers', chatController.getActiveAstrologers);
