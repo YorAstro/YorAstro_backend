@@ -1,10 +1,9 @@
-const  Chat  = require('../models/chat.js');
-const  User  = require('../models/users.js');
+const { Chat, User } = require('../models');
 const { logger } = require('../utils/logger');
 const { ValidationError } = require('../utils/errorHandler');
 const { v4: uuidv4 } = require('uuid');
-const sequelize = require('sequelize');
 const { Op } = require('sequelize');
+
 class ChatService {
     constructor() {
         this.activeConnections = new Map(); // Store active socket connections
@@ -30,9 +29,9 @@ class ChatService {
     // Fetch astrologer details
     async getAstrologerDetails(astrologerId) {
         try {
-            const astrologer = await User.findByPk(astrologerId, {
-                attributes: ['id', 'name', 'email', 'expertise', 'experience', 'role'],
-                where: { role: 'astrologer' }
+            const astrologer = await User.findOne({
+                where: { id: astrologerId, role: 'astrologer' },
+                attributes: ['id', 'name', 'email', 'expertise', 'experience', 'role']
             });
 
             if (!astrologer) {
@@ -69,7 +68,7 @@ class ChatService {
         try {
             const messages = await Chat.findAll({
                 where: {
-                    [sequelize.Op.or]: [
+                    [Op.or]: [
                         { senderId: userId, receiverId: astrologerId },
                         { senderId: astrologerId, receiverId: userId }
                     ]
@@ -113,8 +112,8 @@ class ChatService {
     async validateChatParticipants(userId, astrologerId) {
         try {
             const [user, astrologer] = await Promise.all([
-                User.findByPk(userId),
-                User.findByPk(astrologerId)
+                User.findOne({ where: { id: userId } }),
+                User.findOne({ where: { id: astrologerId } })
             ]);
 
             if (!user || !astrologer) {
@@ -128,30 +127,6 @@ class ChatService {
             return { user, astrologer };
         } catch (error) {
             logger.error(`Error validating chat participants: ${error.message}`);
-            throw error;
-        }
-    }
-
-    // Mark message as read
-    async markMessageAsRead(messageId, senderId, receiverId) {
-        try {
-            const message = await Chat.findOne({
-                where: {
-                    id: messageId,
-                    senderId,
-                    receiverId,
-                    isRead: false
-                }
-            });
-
-            if (!message) {
-                throw new ValidationError('Message not found or already read');
-            }
-
-            await message.update({ isRead: true });
-            return message;
-        } catch (error) {
-            logger.error(`Error marking message as read: ${error.message}`);
             throw error;
         }
     }

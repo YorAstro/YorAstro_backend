@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../services/databaseConnection.js");
-
+const Chat = require("./chat.js");
 class User extends Model {}
 
 User.init(

@@ -10,7 +10,8 @@ class SocketHandler {
         this.io = socketIO(server, {
             cors: {
                 origin: config.cors.origin,
-                methods: ['GET', 'POST']
+                methods: ['GET', 'POST'],
+                credentials: true
             }
         });
 
@@ -22,8 +23,20 @@ class SocketHandler {
         // Authentication middleware
         this.io.use(async (socket, next) => {
             try {
-                const token = socket.handshake.auth.token;
+                // Log the entire handshake for debugging
+                logger.info('Socket handshake:', {
+                    auth: socket.handshake.auth,
+                    headers: socket.handshake.headers,
+                    query: socket.handshake.query
+                });
+
+                // Try to get token from different possible locations
+                const token = socket.handshake.auth.token || 
+                            socket.handshake.query.token || 
+                            socket.handshake.headers.authorization?.split(' ')[1];
+
                 if (!token) {
+                    logger.error('No token found in socket connection');
                     throw new ValidationError('Authentication token required');
                 }
 
