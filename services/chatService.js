@@ -73,7 +73,7 @@ class ChatService {
                         { senderId: astrologerId, receiverId: userId }
                     ]
                 },
-                order: [['timestamp', 'ASC']],
+                order: [['timestamp', 'DESC']],
                 include: [
                     {
                         model: User,
