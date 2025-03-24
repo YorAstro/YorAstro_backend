@@ -23,13 +23,6 @@ class SocketHandler {
         // Authentication middleware
         this.io.use(async (socket, next) => {
             try {
-                // Log the entire handshake for debugging
-                logger.info('Socket handshake:', {
-                    auth: socket.handshake.auth,
-                    headers: socket.handshake.headers,
-                    query: socket.handshake.query
-                });
-
                 // Try to get token from different possible locations
                 const token = socket.handshake.auth.token || 
                             socket.handshake.query.token || 
