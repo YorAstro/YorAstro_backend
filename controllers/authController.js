@@ -63,8 +63,9 @@ const registerAstrologer = async (req, res) => {
         const token = jwt.sign(
             { userId: newUser.id, role: newUser.role },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '24h' }
         );
+        console.log(token);
         return res.status(201).json({ message: 'User registered successfully', userId: newUser.id, token: token });
     } catch (err) {
         console.log(err);
@@ -75,7 +76,7 @@ const registerAstrologer = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ where: { email }, attributes: ['name', 'email', 'phone', 'gender', 'role','dateofbirth','password'] });
+        const user = await User.findOne({ where: { email }, attributes: ['name', 'email', 'phone', 'gender', 'role','dateofbirth','password','id'] });
         if (!user) {
             return res.status(400).json({ error: "Invalid Credentials" });
         }
@@ -88,10 +89,11 @@ const login = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { userId: user.id, role: user.role },
+            { id: user.id, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '24h' }
         );
+        console.log(token);
 
         return res.status(200).json({ message: "Login successful", token, userData: user });
     } catch (err) {

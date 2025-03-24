@@ -1,6 +1,6 @@
 const  jwt =require('jsonwebtoken');
 const dotenv = require('dotenv');
-const User =require('../models/users');
+const User = require('../models/users.js');
 dotenv.config();
   const authenticate = async (req ,res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
@@ -11,9 +11,14 @@ dotenv.config();
     }
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      let { id } = decoded['data'];
-      await User.findByIdAndUpdate(id , {lastLogin : new Date()});
-      req.user = decoded['data'];
+      console.log(decoded);
+      let { id } = decoded;
+      await User.update(
+        { lastLogin: new Date() },
+        { where: { id } }
+      );
+            req.user = decoded;
+      req.user.token = token;
       next();
     } catch (error) {
       console.error(error);

@@ -1,8 +1,10 @@
-const { Chat } = require('../models/chat');
-const { User } = require('../models/users');
+const  Chat  = require('../models/chat.js');
+const  User  = require('../models/users.js');
 const { logger } = require('../utils/logger');
 const { ValidationError } = require('../utils/errorHandler');
-
+const { v4: uuidv4 } = require('uuid');
+const sequelize = require('sequelize');
+const { Op } = require('sequelize');
 class ChatService {
     constructor() {
         this.activeConnections = new Map(); // Store active socket connections
@@ -48,6 +50,7 @@ class ChatService {
     async saveMessage(senderId, receiverId, message) {
         try {
             const chat = await Chat.create({
+                id: uuidv4(),
                 senderId,
                 receiverId,
                 message,
@@ -66,7 +69,7 @@ class ChatService {
         try {
             const messages = await Chat.findAll({
                 where: {
-                    [Op.or]: [
+                    [sequelize.Op.or]: [
                         { senderId: userId, receiverId: astrologerId },
                         { senderId: astrologerId, receiverId: userId }
                     ]
@@ -125,6 +128,30 @@ class ChatService {
             return { user, astrologer };
         } catch (error) {
             logger.error(`Error validating chat participants: ${error.message}`);
+            throw error;
+        }
+    }
+
+    // Mark message as read
+    async markMessageAsRead(messageId, senderId, receiverId) {
+        try {
+            const message = await Chat.findOne({
+                where: {
+                    id: messageId,
+                    senderId,
+                    receiverId,
+                    isRead: false
+                }
+            });
+
+            if (!message) {
+                throw new ValidationError('Message not found or already read');
+            }
+
+            await message.update({ isRead: true });
+            return message;
+        } catch (error) {
+            logger.error(`Error marking message as read: ${error.message}`);
             throw error;
         }
     }

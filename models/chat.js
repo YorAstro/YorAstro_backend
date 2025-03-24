@@ -3,23 +3,22 @@ const sequelize = require("../services/databaseConnection.js");
 
 const Chat = sequelize.define('Chat', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.CHAR(36),
         primaryKey: true,
-        autoIncrement: true
     },
     senderId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.CHAR(36),
         allowNull: false,
         references: {
-            model: 'Users',
+            model: 'User',
             key: 'id'
         }
     },
     receiverId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.CHAR(36),
         allowNull: false,
         references: {
-            model: 'Users',
+            model: 'User',
             key: 'id'
         }
     },

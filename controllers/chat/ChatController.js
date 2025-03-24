@@ -1,4 +1,4 @@
-const chatService = require('../../services/chatService');
+const chatService = require('../../services/chatService.js');
 const { logger } = require('../../utils/logger');
 const ResponseHandler = require('../../utils/responseHandler');
 const { ValidationError } = require('../../utils/errorHandler');
