@@ -21,6 +21,9 @@ class ChatController {
     async getChatHistory(req, res) {
         try {
             const { astrologerId } = req.params;
+            if(!astrologerId){
+                return ResponseHandler.error(res, "AstrologerId is Required in params", 500);
+            }
             const userId = req.user.id;
 
             // Validate chat participants
