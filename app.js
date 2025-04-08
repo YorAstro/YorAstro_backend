@@ -46,7 +46,6 @@ app.use(`${config.api.prefix}/users`, userRoutes);
 app.use(`${config.api.prefix}/products`, productRoutes);
 app.use(`${config.api.prefix}/categories`, categoryRoutes);
 app.use(`${config.api.prefix}/chat`, chatRoutes);
-
 // Error handling middleware
 app.use(logError);
 app.use(errorHandler);
