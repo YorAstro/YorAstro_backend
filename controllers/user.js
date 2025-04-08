@@ -7,7 +7,7 @@ const astrologerList = async (req, res) =>{
         const astrologerList = await User.findAll({where:{role : "astrologer"},attributes: ['name', 'email', 'phone', 'gender', 'role','dateofbirth','id'] });
         res.status(200).send({data : astrologerList});
     } catch (error) {
-        console.log(err);
+        console.log(error);
         return res.status(500).json({ error: 'Internal Server Error', details: err.message });
     }
 }
